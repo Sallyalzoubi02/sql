@@ -1,0 +1,51 @@
+CREATE DATABASE Library;
+
+CREATE TABLE Books(
+BookID INT PRIMARY KEY,
+Title VARCHAR(100),
+AuthorID VARCHAR(100),
+PublishedYear INT,
+CopiesAvailable INT,
+BookCategory VARCHAR(100)
+);
+CREATE TABLE Authors(
+AuthorID INT PRIMARY KEY,
+FirstName VARCHAR(100),
+LastName VARCHAR(100),
+BirthYear DATE
+);
+
+
+
+INSERT INTO Books (BookID,Title,AuthorID,PublishedYear,CopiesAvailable,BookCategory)
+VALUES 
+(1,'Calculas',1,2020,200,'MATH'),
+(2,'Music',2,2023,50,'ART'),
+(3,'Calculas 2',1,2021,0,'MATH'),
+(4,'Physics',3,2025,100,'SCINCE'),
+(5,'DATA MINNING',1,2017,70,'BIG DATA');
+
+
+INSERT INTO Authors (AuthorID,FirstName,LastName,BirthYear)
+VALUES 
+(1,'Ali','Mohammad','1987-01-05'),
+(2,'Ahmad','Adeel','1976-02-02'),
+(3,'Jonh','Smith','1980-11-11'),
+(4,'Joe','Doe','1990-06-22'),
+(5,'Sarah','Leo','1994-03-09');
+
+SELECT * FROM Books ;
+SELECT * FROM Authors;
+
+SELECT MAX(CopiesAvailable) AS highest, MIN(CopiesAvailable) AS lowest FROM Books;
+
+SELECT AVG(PublishedYear) AS AVG_Published FROM Books;
+
+SELECT COUNT(*) AS Books_count FROM Books;
+
+TRUNCATE TABLE Books;
+
+ALTER TABLE Authors 
+ADD Email VARCHAR(100), Phone_Number INT ;
+
+DROP TABLE Authors;
