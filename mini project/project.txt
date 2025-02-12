@@ -1,0 +1,201 @@
+CREATE TABLE Categories (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) UNIQUE NOT NULL,
+    Description NVARCHAR(255)
+);
+
+CREATE TABLE Books (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Title NVARCHAR(255) NOT NULL,
+    Genre NVARCHAR(255) NOT NULL,
+    PublicationYear DATE NOT NULL,
+    AvailabilityStatus BIT NOT NULL
+	FOREIGN KEY (Genre) REFERENCES Categories(Name),
+);
+
+
+
+CREATE TABLE Members (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    ContactInformation VARCHAR(255) NOT NULL,
+    MembershipType VARCHAR(255) NOT NULL,
+    RegistrationDate DATE NOT NULL
+);
+
+CREATE TABLE Borrowing (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    MemberID INT NOT NULL,
+    BookID INT NOT NULL,
+    BorrowingDate DATETIME NOT NULL,
+    DueDate DATETIME NOT NULL,
+    ReturnDate DATETIME,
+    FOREIGN KEY (MemberID) REFERENCES Members(ID),
+    FOREIGN KEY (BookID) REFERENCES Books(ID)
+);
+
+CREATE TABLE LibraryStaff (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL,
+    ContactInfo NVARCHAR(255) NOT NULL,
+    AssignedSection NVARCHAR(255) NOT NULL,
+    EmploymentDate DATE NOT NULL
+);
+
+CREATE TABLE Reservations (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    MemberID INT NOT NULL,
+    BookID INT NOT NULL,
+    ReservationDate DATETIME NOT NULL,
+    Status NVARCHAR(255) NOT NULL,
+    FOREIGN KEY (MemberID) REFERENCES Members(ID),
+    FOREIGN KEY (BookID) REFERENCES Books(ID)
+);
+
+CREATE TABLE FinancialFines (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    MemberID INT NOT NULL,
+    Amount DECIMAL(8, 2) NOT NULL,
+    PaymentStatus VARCHAR(255) NOT NULL,
+    FOREIGN KEY (MemberID) REFERENCES Members(ID)
+);
+
+
+-- إدخال بيانات في جدول Categories (5 صفوف)
+INSERT INTO Categories (Name, Description) VALUES
+('Fiction', 'Fictional books and novels'),
+('Science', 'Scientific books and research'),
+('History', 'Historical books and biographies'),
+('Technology', 'Books about technology and IT'),
+('Philosophy', 'Books about philosophical thoughts and ideas');
+
+-- إدخال بيانات في جدول Books (5 صفوف)
+INSERT INTO Books (Title, Genre, PublicationYear, AvailabilityStatus) VALUES
+('The Great Gatsby', 'Fiction', '1925-04-10', 1),
+('A Brief History of Time', 'Science', '1988-04-01', 1),
+('Sapiens: A Brief History of Humankind', 'History', '2011-09-04', 1),
+('Clean Code', 'Technology', '2008-08-01', 1),
+('Meditations', 'Philosophy', '2010-04-01', 1);
+
+-- إدخال بيانات في جدول Members (5 صفوف)
+INSERT INTO Members (FirstName, LastName, ContactInformation, MembershipType, RegistrationDate) VALUES
+('Ali', 'Khaled', 'ali.khaled@example.com', 'Standard', '2024-01-15'),
+('Lina', 'Hassan', 'lina.hassan@example.com', 'Premium', '2023-11-20'),
+('Omar', 'Nasser', 'omar.nasser@example.com', 'Standard', '2024-02-05'),
+('Hana', 'Mohammad', 'hana.mohammad@example.com', 'Premium', '2024-02-10'),
+('Tariq', 'Salem', 'tariq.salem@example.com', 'Standard', '2023-12-01');
+
+-- إدخال بيانات في جدول Borrowing (5 صفوف)
+INSERT INTO Borrowing (MemberID, BookID, BorrowingDate, DueDate, ReturnDate) VALUES
+(1, 11, '2024-02-01 10:00:00', '2024-02-15 10:00:00', NULL),
+(2, 13, '2024-01-20 12:30:00', '2024-02-03 12:30:00', '2024-02-02 14:00:00'),
+(3, 12, '2024-02-05 08:00:00', '2024-02-19 08:00:00', NULL),
+(4, 14, '2024-02-07 14:00:00', '2024-02-21 14:00:00', NULL),
+(5, 15, '2024-02-09 16:45:00', '2024-02-23 16:45:00', NULL);
+
+-- إدخال بيانات في جدول LibraryStaff (5 صفوف)
+INSERT INTO LibraryStaff (Name, ContactInfo, AssignedSection, EmploymentDate) VALUES
+('Sarah Ahmed', 'sarah.ahmed@example.com', 'Fiction Section', '2022-06-10'),
+('Khaled Samir', 'khaled.samir@example.com', 'Technology Section', '2021-09-01'),
+('Nour Ali', 'nour.ali@example.com', 'Science Section', '2023-03-15'),
+('Yasmine Hassan', 'yasmine.hassan@example.com', 'History Section', '2020-07-22'),
+('Omar Farouk', 'omar.farouk@example.com', 'Philosophy Section', '2019-11-30');
+
+-- إدخال بيانات في جدول Reservations (5 صفوف)
+INSERT INTO Reservations (MemberID, BookID, ReservationDate, Status) VALUES
+(3, 12, '2024-02-10 15:00:00', 'Pending'),
+(1, 14, '2024-02-12 18:30:00', 'Completed'),
+(5, 11, '2024-02-14 10:00:00', 'Pending'),
+(2, 15, '2024-02-16 12:45:00', 'Canceled'),
+(4, 13, '2024-02-18 09:30:00', 'Completed');
+
+-- إدخال بيانات في جدول FinancialFines (5 صفوف)
+INSERT INTO FinancialFines (MemberID, Amount, PaymentStatus) VALUES
+(1, 5.00, 'Unpaid'),
+(2, 3.50, 'Paid'),
+(3, 7.25, 'Unpaid'),
+(4, 2.00, 'Paid'),
+(5, 10.00, 'Unpaid');
+
+-- Q1
+SELECT * FROM Members WHERE RegistrationDate = '2023-11-20';
+
+--Q2
+SELECT * FROM Books WHERE Title = 'The Great Gatsby';
+
+--Q3
+ALTER TABLE Members ADD Email varchar(255);
+
+--Q4
+INSERT INTO Members VALUES
+('Omar', 'Tariq','9876543210' , 'Student', '5-6-2024' ,'Omar@gmail.com' );
+
+
+--Q5 
+SELECT Members.FirstName ,Members.LastName ,Reservations.ReservationDate , Reservations.Status
+FROM Members
+INNER JOIN Reservations ON Members.ID = MemberID;
+
+--Q6
+
+SELECT Members.FirstName ,Members.LastName , Books.Title
+FROM Members
+INNER JOIN Reservations ON Members.ID = MemberID
+INNER JOIN Books ON BookID = Books.ID
+WHERE Books.Title= 'Clean Code';
+
+--Q7
+
+SELECT Members.FirstName ,Members.LastName , Books.Title ,ReturnDate
+FROM Members
+INNER JOIN Borrowing ON Members.ID = MemberID
+INNER JOIN Books ON BookID = Books.ID
+WHERE Books.Title= 'Sapiens: A Brief History of Humankind' AND ReturnDate IS NOT NULL ;
+
+--Q8
+SELECT Members.FirstName ,Members.LastName , Books.Title, DueDate ,ReturnDate 
+FROM Members
+INNER JOIN Borrowing ON Members.ID = MemberID
+INNER JOIN Books ON BookID = Books.ID
+WHERE ReturnDate > DueDate or getdate() > DueDate;
+
+--Q9
+INSERT INTO Borrowing (MemberID, BookID, BorrowingDate, DueDate, ReturnDate) VALUES
+(1, 11, '2025-02-01 10:00:00', '2025-03-15 10:00:00', NULL),
+(2, 12, '2025-02-20 12:30:00', '2025-03-03 12:30:00', '2025-02-02 14:00:00'),
+(3, 12, '2025-02-05 08:00:00', '2025-03-19 08:00:00', NULL),
+(4, 11, '2025-02-07 14:00:00', '2025-03-21 14:00:00', NULL),
+(5, 15, '2025-02-09 16:45:00', '2025-03-23 16:45:00', NULL);
+SELECT Books.Title , COUNT(BookID) AS Borrowed_Times 
+FROM Books
+INNER JOIN Borrowing ON BookID = Books.ID
+GROUP BY Books.Title 
+HAVING COUNT(BookID) >3;
+
+--Q10
+SELECT Members.FirstName ,Members.LastName , Books.Title ,BorrowingDate
+FROM Members
+INNER JOIN Borrowing ON Members.ID = MemberID
+INNER JOIN Books ON BookID = Books.ID
+WHERE BorrowingDate BETWEEN '2024-01-01' AND '2024-10-01' ;
+
+--Q11
+SELECT COUNT(ID) AS TOTAL_BOOKS 
+FROM Books
+WHERE AvailabilityStatus =1;
+
+--Q12
+SELECT Members.FirstName ,Members.LastName , Books.Title ,ReturnDate
+FROM Members
+INNER JOIN Borrowing ON Members.ID = MemberID
+INNER JOIN Books ON BookID = Books.ID
+WHERE ReturnDate IS NULL ;
+
+--Q13
+SELECT Members.FirstName ,Members.LastName , Books.Title ,ReturnDate
+FROM Members
+INNER JOIN Borrowing ON Members.ID = MemberID
+INNER JOIN Books ON BookID = Books.ID
+INNER JOIN Categories on Genre = Categories.Name
+WHERE Categories.Name='Fiction';
